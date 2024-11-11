@@ -1,48 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>Home Page</title>
-  </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Upload and Pickup</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
 <body>
 
-<div class="container">
-  <div class="card">
-    <h2>User Login</h2>
-    <form>
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-      </div>
-      <div class="form-group">
-        <button type="submit">Login</button>
-      </div>
-    </form>
-  </div>
+    <!-- Header -->
+    <header class="bg-primary text-white text-center py-4">
+        <h1>Online Document Upload and Pickup</h1>
+        <nav>
+            <ul class="nav justify-content-center">
+                <li class="nav-item"><a class="nav-link text-white" href="#upload">Upload Document</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#order-history">Order History</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#account">My Account</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <div class="card">
-    <h2>Administration Login</h2>
-    <form>
-      <div class="form-group">
-        <label for="admin-username">Username</label>
-        <input type="text" id="admin-username" name="admin-username" required>
-      </div>
-      <div class="form-group">
-        <label for="admin-password">Password</label>
-        <input type="password" id="admin-password" name="admin-password" required>
-      </div>
-      <div class="form-group">
-        <button type="submit">Login</button>
-      </div>
-    </form>
-  </div>
-</div>
+    <!-- Main Content -->
+    <main class="container my-5">
+        
+        <!-- Document Upload Section -->
+        <section id="upload" class="mb-5">
+            <h2 class="text-center mb-4">Upload Your Document</h2>
+            <form action="/upload" method="POST" enctype="multipart/form-data" class="border p-4 rounded shadow-sm bg-light">
+                
+                <div class="form-group">
+                    <label for="document">Choose Document:</label>
+                    <input type="file" class="form-control" id="document" name="document" required>
+                </div>
 
-</body>
-</html>
+                <div class="form-group">
+                    <label for="color">Color Options:</label>
+                    <select id="color" name="color" class="form-control">
+                        <option value="black-white">Black & White</option>
+                        <option value="color">Color</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="paper-size">Paper Size:</label>
+                    <select id="paper-size" name="paper-size" class="form-control">
+                        <option value="a4">A4</option>
+                        <option value="a3">A3</option>
+                        <option value="letter">Letter</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="binding">Binding:</label>
+                    <select id="binding" name="binding" class="form-control">
+                        <option value="none">None</option>
+                        <option value="staple">Staple</option>
+                        <option value="spiral">Spiral Binding</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="pickup-time">Pickup Time:</label>
+                    <input type="datetime-local" class="form-control" id="pickup-time" name="pickup-time" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Submit Order</button>
+            </form>
+        </section>
+
+        <!-- Order History Section -->
+        <section id="order-history" class="mb-5">
+            <h2 class="text-center mb-4">Order History</h2>
+            <p class="text-center">Login to view your previous orders.</p>
+            <div class="text-center">
+                <button onclick="location.href='/login'" class="btn btn-secondary">Login</button>
+            </div>
+        </section>
+
+        <!-- Account Section -->
+        <section id="account" class="mb-5">
+            <h2 class="text-center mb-4">My Account</h2>
+            <p class="text-center">Create an account to save your documents and easily reorder.</p>
+            <div class="text-center">
+              <button onclick="location.href='Register.html'" class="btn btn-secondary">Create Account</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Document Upload and Pickup Service. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies (Optional if you need JS components like modals or tooltips) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js
