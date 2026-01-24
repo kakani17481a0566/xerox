@@ -3,29 +3,50 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-    const [user, setUser] = useState(null); // { role: 'student' | 'xerox', email: '' }
-    const [orders, setOrders] = useState([
-        {
-            id: 1,
-            fileName: 'Physics_Notes.pdf',
-            fileType: 'pdf',
-            status: 'Pending',
-            type: 'Black & White',
-            copies: 1,
-            studentName: 'John Doe',
-            timestamp: new Date().toISOString(),
-        },
-        {
-            id: 2,
-            fileName: 'Chemistry_Lab.docx',
-            fileType: 'docx',
-            status: 'Completed',
-            type: 'Color',
-            copies: 2,
-            studentName: 'Jane Smith',
-            timestamp: new Date(Date.now() - 86400000).toISOString(),
+    // Initialize state from localStorage if available
+    const [user, setUser] = useState(() => {
+        const savedUser = localStorage.getItem('xerox_user');
+        return savedUser ? JSON.parse(savedUser) : null;
+    });
+
+    const [orders, setOrders] = useState(() => {
+        const savedOrders = localStorage.getItem('xerox_orders');
+        return savedOrders ? JSON.parse(savedOrders) : [
+            {
+                id: 1,
+                fileName: 'Physics_Notes.pdf',
+                fileType: 'pdf',
+                status: 'Pending',
+                type: 'Black & White',
+                copies: 1,
+                studentName: 'John Doe',
+                timestamp: new Date().toISOString(),
+            },
+            {
+                id: 2,
+                fileName: 'Chemistry_Lab.docx',
+                fileType: 'docx',
+                status: 'Completed',
+                type: 'Color',
+                copies: 2,
+                studentName: 'Jane Smith',
+                timestamp: new Date(Date.now() - 86400000).toISOString(),
+            }
+        ];
+    });
+
+    // Save to localStorage whenever user or orders change
+    useEffect(() => {
+        if (user) {
+            localStorage.setItem('xerox_user', JSON.stringify(user));
+        } else {
+            localStorage.removeItem('xerox_user');
         }
-    ]);
+    }, [user]);
+
+    useEffect(() => {
+        localStorage.setItem('xerox_orders', JSON.stringify(orders));
+    }, [orders]);
 
     const login = (email, password, role) => {
         // Dummy validation
@@ -42,27 +63,31 @@ export const AppProvider = ({ children }) => {
 
     const logout = () => {
         setUser(null);
+        localStorage.removeItem('xerox_user');
     };
 
     const addOrder = (order) => {
         const newOrder = {
             ...order,
-            id: orders.length + 1,
+            id: Date.now(), // Use timestamp for unique ID instead of length + 1
             status: 'Pending',
             timestamp: new Date().toISOString(),
             studentName: user?.name || 'Unknown Student',
         };
-        setOrders([newOrder, ...orders]);
+        const updatedOrders = [newOrder, ...orders];
+        setOrders(updatedOrders);
     };
 
     const updateOrderStatus = (orderId, newStatus) => {
-        setOrders(orders.map(order =>
+        const updatedOrders = orders.map(order =>
             order.id === orderId ? { ...order, status: newStatus } : order
-        ));
+        );
+        setOrders(updatedOrders);
     };
 
     const deleteOrder = (orderId) => {
-        setOrders(orders.filter(order => order.id !== orderId));
+        const updatedOrders = orders.filter(order => order.id !== orderId);
+        setOrders(updatedOrders);
     };
 
     return (

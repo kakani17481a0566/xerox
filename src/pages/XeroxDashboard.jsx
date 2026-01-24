@@ -24,13 +24,36 @@ export default function XeroxDashboard() {
             <FileDetailsModal
                 isOpen={!!selectedOrder}
                 onClose={() => setSelectedOrder(null)}
-                order={selectedOrder ? { ...selectedOrder, onPrint: () => window.print() } : null}
+                order={selectedOrder ? {
+                    ...selectedOrder,
+                    onPrint: () => {
+                        if (selectedOrder.fileData) {
+                            // Open the actual file content in a new window for printing
+                            const printWindow = window.open();
+                            if (printWindow) {
+                                printWindow.document.write(
+                                    `<iframe width='100%' height='100%' src='${selectedOrder.fileData}'></iframe>`
+                                );
+                                printWindow.document.title = selectedOrder.fileName;
+                                // Automatically trigger print after a short delay to ensure load
+                                setTimeout(() => {
+                                    printWindow.print();
+                                }, 500);
+                            } else {
+                                alert("Pop-up blocked! Please allow pop-ups to print.");
+                            }
+                        } else {
+                            // Fallback for old/mock orders without file data
+                            window.print();
+                        }
+                    }
+                } : null}
             />
 
             {/* Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center">
-                    <div className="p-4 bg-blue-50 text-blue-600 rounded-full mr-4">
+                    <div className="p-4 bg-gray-100 text-black rounded-full mr-4">
                         <Clock className="h-6 w-6" />
                     </div>
                     <div>
@@ -40,7 +63,7 @@ export default function XeroxDashboard() {
                 </div>
 
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center">
-                    <div className="p-4 bg-green-50 text-green-600 rounded-full mr-4">
+                    <div className="p-4 bg-gray-100 text-black rounded-full mr-4">
                         <CheckCircle className="h-6 w-6" />
                     </div>
                     <div>
@@ -50,7 +73,7 @@ export default function XeroxDashboard() {
                 </div>
 
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center">
-                    <div className="p-4 bg-purple-50 text-purple-600 rounded-full mr-4">
+                    <div className="p-4 bg-gray-100 text-black rounded-full mr-4">
                         <TrendingUp className="h-6 w-6" />
                     </div>
                     <div>
@@ -64,7 +87,7 @@ export default function XeroxDashboard() {
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                     <h2 className="text-xl font-bold flex items-center text-gray-800">
-                        <Printer className="mr-2 text-blue-600 h-5 w-5" /> Print Queue
+                        <Printer className="mr-2 text-black h-5 w-5" /> Print Queue
                     </h2>
                     <span className="text-sm text-gray-500">
                         {orders.length} total requests

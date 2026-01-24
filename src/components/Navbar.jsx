@@ -18,8 +18,8 @@ export default function Navbar() {
                 <div className="flex justify-between h-16">
                     <div className="flex items-center">
                         <Link to="/" className="flex-shrink-0 flex items-center">
-                            <Printer className="h-8 w-8 text-blue-600 mr-2" />
-                            <span className="font-bold text-xl text-gray-800">Online Xerox</span>
+                            <Printer className="h-8 w-8 text-black mr-2" />
+                            <span className="font-bold text-xl text-gray-900">Online Xerox</span>
                         </Link>
                     </div>
                     <div className="flex items-center">
@@ -31,7 +31,7 @@ export default function Navbar() {
                                 </div>
                                 <button
                                     onClick={handleLogout}
-                                    className="flex items-center text-red-600 hover:text-red-800 transition-colors"
+                                    className="flex items-center text-gray-700 hover:text-black transition-colors"
                                 >
                                     <LogOut className="h-5 w-5 mr-1" />
                                     Logout
